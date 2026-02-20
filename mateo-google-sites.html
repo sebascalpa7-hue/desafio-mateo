@@ -1,0 +1,675 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>El Desafío de Mateo – RED</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;900&family=Baloo+2:wght@700;900&display=swap');
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Nunito', sans-serif;
+    background: #f5f3ff;
+    color: #1c1c2e;
+    padding: 24px 16px 48px;
+  }
+
+  /* ── ENCABEZADO ── */
+  .portada {
+    background: linear-gradient(135deg, #1c1c2e 0%, #2d2b55 60%, #1a9e8f 100%);
+    border-radius: 24px;
+    padding: 40px 32px;
+    text-align: center;
+    margin-bottom: 24px;
+    color: white;
+  }
+  .semaforo-deco {
+    display: inline-flex;
+    flex-direction: column;
+    gap: 8px;
+    background: rgba(0,0,0,.35);
+    padding: 12px 10px;
+    border-radius: 14px;
+    margin-bottom: 20px;
+  }
+  .luz-deco {
+    width: 32px; height: 32px; border-radius: 50%;
+    display: block;
+  }
+  .portada h1 {
+    font-family: 'Baloo 2', cursive;
+    font-size: 2.4rem;
+    line-height: 1.15;
+    margin-bottom: 10px;
+  }
+  .portada p { font-size: 1rem; opacity: .85; margin-bottom: 20px; }
+  .chips { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; }
+  .chip {
+    background: rgba(255,255,255,.15);
+    border: 1px solid rgba(255,255,255,.3);
+    color: white;
+    padding: 5px 14px;
+    border-radius: 99px;
+    font-size: .82rem;
+    font-weight: 700;
+  }
+
+  /* ── TARJETA GENÉRICA ── */
+  .card {
+    background: white;
+    border-radius: 22px;
+    box-shadow: 0 8px 32px rgba(0,0,0,.08);
+    overflow: hidden;
+    margin-bottom: 20px;
+  }
+  .banda { height: 8px; }
+  .r { background: linear-gradient(to right,#e63946,#ff6b6b); }
+  .a { background: linear-gradient(to right,#e9a800,#ffd060); }
+  .v { background: linear-gradient(to right,#1a9e8f,#43c6ac); }
+  .m { background: linear-gradient(to right,#6c3fc5,#a78bfa); }
+  .g { background: #ddd; }
+
+  .card-body { padding: 24px 28px; }
+  .card-body h2 {
+    font-family: 'Baloo 2', cursive;
+    font-size: 1.35rem;
+    margin-bottom: 10px;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .card-body p { font-size: .97rem; line-height: 1.7; color: #333; margin-bottom: 10px; }
+  .card-body p:last-child { margin-bottom: 0; }
+
+  /* ── SEMÁFORO HEADER ── */
+  .sf-bar {
+    background: #1c1c2e;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 12px 20px;
+  }
+  .sf-widget { display: flex; background:#111; border-radius:40px; padding:5px 9px; gap:7px; }
+  .sf-luz {
+    width: 18px; height: 18px; border-radius: 50%;
+    opacity: .2;
+  }
+  .sf-luz.on { opacity: 1; }
+  .sf-r { background: #e63946; }
+  .sf-a { background: #e9a800; }
+  .sf-v { background: #1a9e8f; }
+  .sf-luz.on.sf-r { box-shadow: 0 0 10px #e63946; }
+  .sf-luz.on.sf-a { box-shadow: 0 0 10px #e9a800; }
+  .sf-luz.on.sf-v { box-shadow: 0 0 10px #1a9e8f; }
+  .sf-label { font-size: .78rem; color: #aaa; font-weight: 700; }
+
+  /* ── ESCENA ── */
+  .escena {
+    text-align: center;
+    padding: 8px 28px 16px;
+  }
+  .emoji-big { font-size: 5.5rem; display: block; margin-bottom: 12px; }
+  .escena p { font-size: 1.02rem; line-height: 1.72; color: #222; }
+  .burbuja {
+    background: #f4f4f8;
+    border-radius: 18px 18px 18px 4px;
+    padding: 13px 18px 13px 42px;
+    margin: 14px auto 0;
+    font-style: italic;
+    color: #444;
+    font-size: .97rem;
+    max-width: 500px;
+    position: relative;
+    text-align: left;
+    line-height: 1.6;
+  }
+  .burbuja::before { content: '💬'; position: absolute; left: 13px; top: 13px; }
+
+  /* ── DECISIONES ── */
+  .decision-zona { padding: 4px 28px 24px; }
+  .decision-titulo {
+    font-family: 'Baloo 2', cursive;
+    font-size: 1.05rem;
+    background: #f3eeff;
+    border-left: 5px solid #6c3fc5;
+    color: #2d1b6e;
+    padding: 10px 16px;
+    border-radius: 12px;
+    margin-bottom: 14px;
+  }
+  .opciones { display: grid; gap: 10px; }
+  .opcion {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 18px;
+    border-radius: 16px;
+    font-size: .97rem;
+    font-weight: 700;
+    line-height: 1.4;
+  }
+  .opcion small { display: block; font-weight: 400; font-size: .82rem; opacity: .72; }
+  .opcion-ico { font-size: 1.8rem; flex-shrink: 0; }
+  .op-r { background: #fff0f1; border: 2px solid #fcc; color: #7a1a1a; }
+  .op-a { background: #fffbec; border: 2px solid #ffe082; color: #5a3500; }
+  .op-v { background: #edfaf8; border: 2px solid #a7e8df; color: #0d5c52; }
+
+  /* ── FEEDBACK ── */
+  .fb {
+    border-radius: 16px;
+    padding: 18px 20px;
+    margin-bottom: 12px;
+  }
+  .fb h3 { font-family: 'Baloo 2', cursive; font-size: 1.05rem; margin-bottom: 7px; }
+  .fb p  { font-size: .93rem; line-height: 1.65; color: #333; }
+  .fb-r { background: #fff0f1; border-left: 5px solid #e63946; }
+  .fb-a { background: #fffbec; border-left: 5px solid #e9a800; }
+  .fb-v { background: #edfaf8; border-left: 5px solid #1a9e8f; }
+  .fb-m { background: #f3eeff; border-left: 5px solid #6c3fc5; }
+
+  /* ── IA BOX ── */
+  .ia-box {
+    background: linear-gradient(135deg,#1c1c2e,#2d2b55);
+    border-radius: 16px;
+    padding: 18px 20px;
+    color: white;
+    margin-bottom: 12px;
+  }
+  .ia-badge {
+    display: inline-block;
+    background: rgba(255,255,255,.12);
+    border: 1px solid rgba(255,255,255,.2);
+    border-radius: 99px;
+    padding: 3px 12px;
+    font-size: .72rem;
+    font-weight: 700;
+    margin-bottom: 9px;
+    letter-spacing: .05em;
+  }
+  .ia-box p { font-size: .92rem; line-height: 1.6; color: rgba(255,255,255,.88); }
+
+  /* ── MAPA ── */
+  .mapa {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 6px;
+    padding: 20px;
+  }
+  .mapa-paso { text-align: center; }
+  .mapa-circulo {
+    width: 48px; height: 48px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.4rem;
+    border: 3px solid;
+    margin: 0 auto 5px;
+  }
+  .mapa-label { font-size: .68rem; color: #777; font-weight: 700; max-width: 60px; }
+  .mapa-flecha { font-size: 1.2rem; color: #bbb; margin-top: -16px; }
+
+  /* ── FICHA DOCENTE ── */
+  .ficha { background: white; border-radius: 22px; box-shadow: 0 8px 32px rgba(0,0,0,.08); padding: 28px; margin-bottom: 20px; }
+  .ficha h3 { font-family: 'Baloo 2', cursive; font-size: 1.2rem; border-bottom: 2px solid #eee; padding-bottom: 10px; margin-bottom: 16px; }
+  .ficha-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 14px; }
+  .ficha-cel { background: #f8f8fc; border-radius: 12px; padding: 12px 14px; }
+  .ficha-cel .etq { font-size: .7rem; color: #888; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; margin-bottom: 3px; }
+  .ficha-cel .val { font-size: .95rem; font-weight: 700; color: #1c1c2e; }
+  .obj-lista { list-style: none; }
+  .obj-lista li { background: #edfaf8; border-radius: 10px; padding: 8px 14px; margin-bottom: 8px; font-size: .9rem; color: #0d5c52; }
+
+  /* ── IA TRANSPARENCIA ── */
+  .ia-panel { background: linear-gradient(135deg,#0f0c29,#302b63); border-radius: 22px; padding: 28px; color: white; margin-bottom: 20px; }
+  .ia-panel h3 { font-family: 'Baloo 2', cursive; font-size: 1.2rem; margin-bottom: 16px; }
+  .ia-item { background: rgba(255,255,255,.07); border: 1px solid rgba(255,255,255,.1); border-radius: 14px; padding: 14px 16px; margin-bottom: 12px; display: flex; gap: 12px; }
+  .ia-item-ico { font-size: 1.5rem; flex-shrink: 0; }
+  .ia-item h4 { font-size: .88rem; font-weight: 700; color: #a78bfa; margin-bottom: 4px; }
+  .ia-item p  { font-size: .82rem; line-height: 1.5; color: rgba(255,255,255,.75); }
+
+  /* ── EVALUACIÓN ── */
+  .eval-card { background: white; border-radius: 22px; box-shadow: 0 8px 32px rgba(0,0,0,.08); padding: 28px; margin-bottom: 20px; }
+  .eval-card h3 { font-family: 'Baloo 2', cursive; font-size: 1.2rem; margin-bottom: 18px; }
+  .preg { margin-bottom: 18px; }
+  .preg p { font-weight: 700; font-size: .97rem; margin-bottom: 10px; color: #1c1c2e; }
+  .respuestas { display: flex; flex-direction: column; gap: 7px; }
+  .resp {
+    display: flex; align-items: center; gap: 10px;
+    padding: 11px 15px;
+    border-radius: 12px;
+    font-size: .93rem;
+    border: 2px solid #eee;
+    background: #fafafa;
+    color: #333;
+  }
+  .resp.correcta { background: #edfaf8; border-color: #1a9e8f; color: #0d5c52; font-weight: 700; }
+  .resp.correcta::before { content: '✅'; flex-shrink: 0; }
+  .resp:not(.correcta)::before { content: '⬜'; flex-shrink: 0; }
+
+  /* ── NOTA DOCENTE ── */
+  .nota {
+    background: #f0f7ff;
+    border: 2px dashed #93c5fd;
+    border-radius: 16px;
+    padding: 14px 18px;
+    font-size: .87rem;
+    color: #1e40af;
+    line-height: 1.65;
+    margin-top: 14px;
+  }
+  .nota strong { display: block; margin-bottom: 4px; }
+
+  /* ── SEPARADOR SECCIÓN ── */
+  .seccion-titulo {
+    font-family: 'Baloo 2', cursive;
+    font-size: 1.5rem;
+    color: #1c1c2e;
+    margin: 32px 0 14px;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .divider { border: none; border-top: 2px dashed #e0e0e0; margin: 10px 0 24px; }
+
+  @media(max-width:480px){
+    .portada h1 { font-size: 1.7rem; }
+    .ficha-grid { grid-template-columns: 1fr; }
+    .emoji-big { font-size: 4rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════
+     PORTADA
+══════════════════════════════════ -->
+<div class="portada">
+  <div class="semaforo-deco">
+    <span class="luz-deco" style="background:#e63946;box-shadow:0 0 14px #e63946"></span>
+    <span class="luz-deco" style="background:#e9a800;box-shadow:0 0 14px #e9a800"></span>
+    <span class="luz-deco" style="background:#1a9e8f;box-shadow:0 0 14px #1a9e8f"></span>
+  </div>
+  <h1>El Desafío<br>de Mateo 🚦</h1>
+  <p>Recurso Educativo de Decisión (RED)<br>Estrategia del Semáforo Emocional · Básica Primaria</p>
+  <div class="chips">
+    <span class="chip">🎓 Básica Primaria</span>
+    <span class="chip">💡 Autocontrol Emocional</span>
+    <span class="chip">🔀 3 Puntos de Decisión</span>
+    <span class="chip">🤖 IA Integrada</span>
+    <span class="chip">📝 Evaluación Incluida</span>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════
+     FICHA PEDAGÓGICA
+══════════════════════════════════ -->
+<div class="ficha">
+  <h3>📋 Ficha del Recurso Educativo</h3>
+  <div class="ficha-grid">
+    <div class="ficha-cel"><div class="etq">Área</div><div class="val">Socio-emocional</div></div>
+    <div class="ficha-cel"><div class="etq">Grado</div><div class="val">2° – 5° Primaria</div></div>
+    <div class="ficha-cel"><div class="etq">Tiempo estimado</div><div class="val">15 – 25 minutos</div></div>
+    <div class="ficha-cel"><div class="etq">Modalidad</div><div class="val">Individual o grupal</div></div>
+  </div>
+  <ul class="obj-lista">
+    <li>✅ Identificar emociones propias en situaciones de conflicto</li>
+    <li>✅ Aplicar la estrategia del semáforo emocional (rojo–amarillo–verde)</li>
+    <li>✅ Explorar distintas formas de resolver conflictos sin violencia</li>
+    <li>✅ Reflexionar sobre las consecuencias de las decisiones</li>
+  </ul>
+  <div class="nota">
+    <strong>💡 Instrucción para el docente:</strong>
+    Este RED puede usarse en proyector para decisión grupal o en dispositivos individuales. Cada sección presenta una escena de la historia con sus opciones de decisión y retroalimentación. Al finalizar, reflexione con el grupo: ¿Qué camino tomaron? ¿Por qué?
+  </div>
+</div>
+
+<!-- ══════════════════════════════════
+     MAPA DE NAVEGACIÓN
+══════════════════════════════════ -->
+<p class="seccion-titulo">🗺️ Mapa de Navegación del RED</p>
+<div class="card">
+  <div class="banda g"></div>
+  <div class="card-body">
+    <h2>🔀 Arquitectura de Interacción (No Lineal)</h2>
+    <p>El estudiante toma <strong>3 decisiones reales</strong> que modifican el recorrido, generando <strong>6 finales diferentes</strong>. Las decisiones no tienen respuesta única: cada camino lleva a reflexión, no a castigo.</p>
+  </div>
+  <div class="mapa">
+    <div class="mapa-paso">
+      <div class="mapa-circulo" style="background:#f3eeff;border-color:#6c3fc5">⚽</div>
+      <div class="mapa-label">Inicio: El partido</div>
+    </div>
+    <div class="mapa-flecha">→</div>
+    <div class="mapa-paso">
+      <div class="mapa-circulo" style="background:#fff0f1;border-color:#e63946">🔴</div>
+      <div class="mapa-label">Decisión 1: ¿Qué hace con el enojo?</div>
+    </div>
+    <div class="mapa-flecha">→</div>
+    <div class="mapa-paso">
+      <div class="mapa-circulo" style="background:#fffbec;border-color:#e9a800">🟡</div>
+      <div class="mapa-label">Decisión 2: ¿Cómo autorregula?</div>
+    </div>
+    <div class="mapa-flecha">→</div>
+    <div class="mapa-paso">
+      <div class="mapa-circulo" style="background:#edfaf8;border-color:#1a9e8f">🟢</div>
+      <div class="mapa-label">Decisión 3: ¿Cómo actúa?</div>
+    </div>
+    <div class="mapa-flecha">→</div>
+    <div class="mapa-paso">
+      <div class="mapa-circulo" style="background:#f3eeff;border-color:#6c3fc5">📝</div>
+      <div class="mapa-label">Evaluación + Mapa personal</div>
+    </div>
+  </div>
+  <div class="card-body" style="padding-top:0">
+    <div class="fb fb-m">
+      <h3>🔀 6 Rutas posibles según las decisiones:</h3>
+      <p>
+        <strong>Ruta A1:</strong> Explotó → Palabras hirientes → Reflexiona (aprendizaje)<br>
+        <strong>Ruta A2:</strong> Explotó → Habló bien → Resolvió (superación)<br>
+        <strong>Ruta B1:</strong> Respiró → Pidió espacio → Volvió a hablar (calma)<br>
+        <strong>Ruta B2:</strong> Respiró → Habló con Luis → Resolvió (diálogo)<br>
+        <strong>Ruta C1:</strong> Aplicó semáforo → Buscó mediación → Resolvió (sabiduría)<br>
+        <strong>Ruta C2:</strong> Aplicó semáforo → Habló solo → Resolvió (¡ruta perfecta!)
+      </p>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════
+     ESCENA 1
+══════════════════════════════════ -->
+<hr class="divider">
+<p class="seccion-titulo">📖 Historia Interactiva</p>
+
+<div class="card">
+  <div class="banda r"></div>
+  <div class="sf-bar">
+    <div class="sf-widget">
+      <div class="sf-luz sf-r on"></div>
+      <div class="sf-luz sf-a"></div>
+      <div class="sf-luz sf-v"></div>
+    </div>
+    <span class="sf-label">🔴 ALTO — Escena 1: El enojo aparece</span>
+  </div>
+  <div class="card-body">
+    <h2>⚽ El partido de recreo · <em style="font-size:.85rem;font-weight:400;color:#888">Decisión 1 – Momento de enojo</em></h2>
+  </div>
+  <div class="escena">
+    <span class="emoji-big">😤</span>
+    <p>Mateo juega fútbol con sus amigos en el recreo. De repente, <strong>Luis le quita el balón sin pedirlo</strong> y anota un gol. ¡Todos celebran... menos Mateo!</p>
+    <div class="burbuja">Eso no es justo. ¡Me robó el balón! Siento que voy a explotar de la rabia...</div>
+  </div>
+  <div class="decision-zona">
+    <div class="decision-titulo">🚦 El semáforo está en ROJO. ¿Qué hace Mateo primero?</div>
+    <div class="opciones">
+      <div class="opcion op-r">
+        <span class="opcion-ico">😡</span>
+        <div><strong>Le grita y lo empuja</strong><small>El enojo lo controla por completo → Ruta A</small></div>
+      </div>
+      <div class="opcion op-a">
+        <span class="opcion-ico">🌬️</span>
+        <div><strong>Se aleja y respira hondo 3 veces</strong><small>Recuerda: rojo significa ¡ALTO! → Ruta B</small></div>
+      </div>
+      <div class="opcion op-v">
+        <span class="opcion-ico">🛑</span>
+        <div><strong>Para, cuenta hasta 5 y no hace nada todavía</strong><small>Aplica el semáforo completo → Ruta C</small></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- CONSECUENCIAS DECISIÓN 1 -->
+<div class="card">
+  <div class="banda r"></div>
+  <div class="sf-bar">
+    <div class="sf-widget">
+      <div class="sf-luz sf-r on"></div>
+      <div class="sf-luz sf-a"></div>
+      <div class="sf-luz sf-v"></div>
+    </div>
+    <span class="sf-label">🔴 Ruta A — El enojo tomó el control</span>
+  </div>
+  <div class="escena">
+    <span class="emoji-big">💥</span>
+    <p>Mateo le gritó a Luis y lo empujó. La maestra intervino. Luis está asustado, los demás dejaron de jugar y Mateo se siente... peor que antes.</p>
+    <div class="burbuja">Yo solo quería que supiera que me molestó... Ahora todo está peor.</div>
+  </div>
+  <div class="card-body" style="padding-top:0">
+    <div class="fb fb-r"><h3>🔴 Lo que pasó en el cerebro de Mateo</h3><p>Cuando sentimos rabia muy fuerte, la parte del cerebro que controla los impulsos "se apaga". <strong>No es culpa de Mateo</strong>, ¡pero sí puede aprender a reconocer esa señal antes de actuar!</p></div>
+    <div class="ia-box">
+      <div class="ia-badge">✨ RETROALIMENTACIÓN CON IA · Claude (Anthropic)</div>
+      <p>Las emociones fuertes son completamente normales, Mateo. Lo que sentiste tenía sentido. Lo importante es que ahora sabes que <strong>el semáforo rojo es una señal para parar</strong>, no para explotar. ¡La próxima vez lo lograrás!</p>
+    </div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="banda a"></div>
+  <div class="sf-bar">
+    <div class="sf-widget">
+      <div class="sf-luz sf-r"></div>
+      <div class="sf-luz sf-a on"></div>
+      <div class="sf-luz sf-v"></div>
+    </div>
+    <span class="sf-label">🟡 Ruta B — Mateo se detuvo a respirar</span>
+  </div>
+  <div class="escena">
+    <span class="emoji-big">🌬️</span>
+    <p>Mateo se aleja unos pasos, cierra los ojos y respira: <strong>inhala... exhala... tres veces</strong>. El enojo sigue ahí, pero ya puede pensar un poco.</p>
+    <div class="burbuja">Sigo enojado, pero ya no quiero explotar. Voy a pensar qué puedo hacer...</div>
+  </div>
+  <div class="card-body" style="padding-top:0">
+    <div class="fb fb-a"><h3>🟡 El poder de la respiración</h3><p>¡Respirar hondo le envía una señal al cerebro de que "no hay peligro"! <strong>3 respiraciones profundas pueden cambiar todo.</strong></p></div>
+    <div class="ia-box">
+      <div class="ia-badge">✨ RETROALIMENTACIÓN CON IA · Claude (Anthropic)</div>
+      <p>¡Muy bien por detenerte y respirar! Eso es exactamente lo que hace el semáforo en amarillo. <strong>Cada vez que practiques esto, se volverá más fácil.</strong> ¡Sigue así!</p>
+    </div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="banda v"></div>
+  <div class="sf-bar">
+    <div class="sf-widget">
+      <div class="sf-luz sf-r"></div>
+      <div class="sf-luz sf-a on"></div>
+      <div class="sf-luz sf-v"></div>
+    </div>
+    <span class="sf-label">🟡 Ruta C — Mateo aplica el semáforo</span>
+  </div>
+  <div class="escena">
+    <span class="emoji-big">🛑</span>
+    <p>Mateo recuerda: <strong>"ROJO significa ALTO. Primero paro, luego pienso."</strong> Se queda inmóvil, aprieta los puños y cuenta mentalmente hasta 5.</p>
+    <div class="burbuja">Uno... dos... tres... cuatro... cinco. Estoy muy enojado, pero ya no voy a explotar.</div>
+  </div>
+  <div class="card-body" style="padding-top:0">
+    <div class="fb fb-v"><h3>🌟 ¡Mateo recuerda el semáforo!</h3><p>Usar una estrategia aprendida en el momento de enojo es una habilidad <strong>muy difícil y valiosa</strong>. ¡Ese es el verdadero autocontrol!</p></div>
+    <div class="ia-box">
+      <div class="ia-badge">✨ RETROALIMENTACIÓN CON IA · Claude (Anthropic)</div>
+      <p>¡Increíble! Usar el semáforo en un momento tan difícil es algo que muy pocas personas saben hacer. <strong>Mateo está demostrando una inteligencia emocional extraordinaria.</strong> ¡Tú lo guiaste perfectamente!</p>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════
+     DECISIÓN 2
+══════════════════════════════════ -->
+<div class="card">
+  <div class="banda a"></div>
+  <div class="sf-bar">
+    <div class="sf-widget">
+      <div class="sf-luz sf-r on"></div>
+      <div class="sf-luz sf-a on"></div>
+      <div class="sf-luz sf-v"></div>
+    </div>
+    <span class="sf-label">🟡 PIENSA — Escena 2: Autorregulación</span>
+  </div>
+  <div class="card-body">
+    <h2>🤔 Decisión 2 · ¿Cómo autorregula Mateo?</h2>
+    <p>Dependiendo del camino elegido, Mateo enfrenta situaciones distintas. En todos los casos llega al semáforo amarillo: <strong>momento de pensar antes de actuar</strong>.</p>
+  </div>
+  <div class="decision-zona">
+    <div class="decision-titulo">🟡 Semáforo en AMARILLO. ¿Qué hace Mateo ahora?</div>
+    <div class="opciones">
+      <div class="opcion op-r">
+        <span class="opcion-ico">😤</span>
+        <div><strong>Ruta A: Le dice palabras hirientes a Luis</strong><small>"Eres un tramposo, nunca más juego contigo" → Final A1</small></div>
+      </div>
+      <div class="opcion op-a">
+        <span class="opcion-ico">🗣️</span>
+        <div><strong>Ruta A/B: Habla con respeto</strong><small>"Me sentí mal cuando tomaste el balón. ¿Podemos hablar?" → Final A2 / B2</small></div>
+      </div>
+      <div class="opcion op-a">
+        <span class="opcion-ico">🚶</span>
+        <div><strong>Ruta B: Pide un momento solo</strong><small>"Necesito un momento, después hablamos" → Final B1</small></div>
+      </div>
+      <div class="opcion op-v">
+        <span class="opcion-ico">👩‍🏫</span>
+        <div><strong>Ruta C: Busca mediación de la maestra</strong><small>Pide apoyo adulto → Final C1</small></div>
+      </div>
+      <div class="opcion op-v">
+        <span class="opcion-ico">🏆</span>
+        <div><strong>Ruta C: Habla solo con Luis con calma</strong><small>Resolución directa y madura → Final C2 ⭐ Ruta perfecta</small></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════
+     FINALES
+══════════════════════════════════ -->
+<div class="card">
+  <div class="banda v"></div>
+  <div class="sf-bar">
+    <div class="sf-widget">
+      <div class="sf-luz sf-r on"></div>
+      <div class="sf-luz sf-a on"></div>
+      <div class="sf-luz sf-v on"></div>
+    </div>
+    <span class="sf-label">🟢 ACTÚA — Escena 3: Los 6 desenlaces</span>
+  </div>
+  <div class="card-body">
+    <h2>🎭 Desenlaces según las decisiones</h2>
+
+    <div class="fb fb-r" style="margin-bottom:10px">
+      <h3>💔 Final A1 — Camino de aprendizaje (⭐⭐)</h3>
+      <p>Mateo dijo palabras hirientes. Luis se fue triste. Mateo está solo. <em>Reflexión: las palabras también lastiman. La próxima vez puedo decir cómo me sentí en lugar de atacar.</em></p>
+    </div>
+    <div class="fb fb-a" style="margin-bottom:10px">
+      <h3>🌟 Final A2 — Camino de superación (⭐⭐⭐)</h3>
+      <p>Mateo empezó mal pero encontró el camino correcto. Habló con calma y Luis se disculpó. <em>Nunca es tarde para cambiar el rumbo.</em></p>
+    </div>
+    <div class="fb fb-a" style="margin-bottom:10px">
+      <h3>🌿 Final B1 — Camino de la calma (⭐⭐⭐)</h3>
+      <p>Mateo pidió espacio, se calmó del todo y regresó a hablar. <em>Conocerse a uno mismo es una fortaleza enorme.</em></p>
+    </div>
+    <div class="fb fb-v" style="margin-bottom:10px">
+      <h3>🏆 Final B2 — Camino del diálogo (⭐⭐⭐)</h3>
+      <p>Mateo respiró y habló directamente con Luis. Acordaron nuevas reglas. <em>El diálogo respetuoso es la herramienta más poderosa.</em></p>
+    </div>
+    <div class="fb fb-v" style="margin-bottom:10px">
+      <h3>🌈 Final C1 — Camino de la sabiduría (⭐⭐⭐)</h3>
+      <p>Mateo aplicó el semáforo y buscó a la maestra. Mediaron juntos. <em>Pedir ayuda cuando la necesitamos es señal de madurez.</em></p>
+    </div>
+    <div class="fb fb-v">
+      <h3>🦸 Final C2 — Ruta perfecta (⭐⭐⭐⭐)</h3>
+      <p>Mateo aplicó el semáforo completo y resolvió el conflicto él solo con calma. <em>¡Eso es autocontrol emocional de verdad!</em></p>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════
+     EVALUACIÓN FINAL
+══════════════════════════════════ -->
+<hr class="divider">
+<p class="seccion-titulo">📝 Evaluación de Comprensión</p>
+
+<div class="eval-card">
+  <h3>📝 Preguntas de reflexión y comprensión</h3>
+
+  <div class="preg">
+    <p>1. ¿Qué significa el color ROJO en el semáforo emocional?</p>
+    <div class="respuestas">
+      <div class="resp">Es hora de actuar y resolver el conflicto</div>
+      <div class="resp correcta">Debo detenerme antes de hacer algo</div>
+      <div class="resp">Puedo decir lo que siento con calma</div>
+    </div>
+  </div>
+
+  <div class="preg">
+    <p>2. ¿Cuál es el primer paso del semáforo que debe usar Mateo?</p>
+    <div class="respuestas">
+      <div class="resp">Hablar inmediatamente con Luis</div>
+      <div class="resp">Contarle a la maestra lo que pasó</div>
+      <div class="resp correcta">Detenerse y no actuar impulsivamente</div>
+    </div>
+  </div>
+
+  <div class="preg">
+    <p>3. ¿Por qué respirar hondo ayuda cuando estamos enojados?</p>
+    <div class="respuestas">
+      <div class="resp">Porque hace que el enojo desaparezca para siempre</div>
+      <div class="resp correcta">Porque ayuda al cerebro a calmarse para poder pensar mejor</div>
+      <div class="resp">Porque demuestra que somos más fuertes</div>
+    </div>
+  </div>
+
+  <div class="preg">
+    <p>4. ¿Cuál es la mejor manera de expresar que algo nos molestó?</p>
+    <div class="respuestas">
+      <div class="resp">"Eres un tramposo y nunca más te hablaré"</div>
+      <div class="resp correcta">"Me sentí mal cuando hiciste eso. ¿Podemos hablarlo?"</div>
+      <div class="resp">Ignorar a la persona y no decirle nada</div>
+    </div>
+  </div>
+
+  <div class="nota">
+    <strong>💡 Uso en el aula:</strong>
+    El docente puede leer cada pregunta en voz alta y pedir a los estudiantes que levanten la mano por la opción que crean correcta. Luego revela la respuesta señalada en verde y genera la reflexión grupal.
+  </div>
+</div>
+
+<!-- ══════════════════════════════════
+     USO DE IA
+══════════════════════════════════ -->
+<hr class="divider">
+<p class="seccion-titulo">🤖 Uso Estratégico de IA</p>
+
+<div class="ia-panel">
+  <h3>🤖 ¿Cómo se usó la Inteligencia Artificial en este RED?</h3>
+  <div class="ia-item">
+    <div class="ia-item-ico">✍️</div>
+    <div><h4>Optimización del guion narrativo</h4><p>El guion de Mateo, los diálogos y los textos de reflexión fueron diseñados y refinados con Claude (Anthropic), garantizando lenguaje adecuado para niños de básica primaria, con tono empático y no punitivo.</p></div>
+  </div>
+  <div class="ia-item">
+    <div class="ia-item-ico">💬</div>
+    <div><h4>Generación de feedback empático</h4><p>Los mensajes de retroalimentación que aparecen en cada pantalla fueron generados mediante prompts específicos a Claude, asegurando respuestas contextualizadas, cálidas y pedagógicamente pertinentes según la decisión tomada.</p></div>
+  </div>
+  <div class="ia-item">
+    <div class="ia-item-ico">🎨</div>
+    <div><h4>Sugerencias visuales e ilustrativas</h4><p>Los prompts para imágenes ilustrativas del enojo, pausa y calma fueron generados con IA (DALL-E / Canva AI). Las ilustraciones emoji fueron seleccionadas sistemáticamente para reforzar el estado emocional de cada escena.</p></div>
+  </div>
+  <div class="ia-item">
+    <div class="ia-item-ico">📊</div>
+    <div><h4>Diseño de la arquitectura de interacción</h4><p>La estructura no lineal, los puntos de decisión y la lógica de consecuencias fueron planeados con apoyo de IA como herramienta de diseño instruccional, garantizando coherencia pedagógica en todas las rutas.</p></div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════
+     CIERRE DOCENTE
+══════════════════════════════════ -->
+<div class="ficha">
+  <h3>📋 Cierre Pedagógico para el Docente</h3>
+  <div class="nota" style="margin-bottom:12px">
+    <strong>💬 Preguntas para reflexión grupal:</strong>
+    ¿Qué camino tomaste con Mateo? · ¿Cuál fue tu decisión más difícil? · ¿Alguna vez te has sentido como él? · ¿Qué harías diferente la próxima vez que sientas mucho enojo?
+  </div>
+  <div class="nota" style="border-color:#86efac;background:#f0fff4;color:#166534">
+    <strong>✅ Actividad de extensión sugerida:</strong>
+    Pida a los estudiantes que dibujen su propio semáforo emocional y escriban qué hacen en cada color. Compártanlo en el aula como recordatorio permanente de la estrategia.
+  </div>
+  <div class="fb fb-m" style="margin-top:14px;margin-bottom:0">
+    <h3>🚦 El semáforo emocional — Para siempre:</h3>
+    <p>🔴 <strong>ROJO = ALTO.</strong> Para antes de actuar.<br>🟡 <strong>AMARILLO = PIENSA.</strong> ¿Qué opciones tengo?<br>🟢 <strong>VERDE = ACTÚA</strong> con calma y con respeto hacia los demás.</p>
+  </div>
+</div>
+
+</body>
+</html>
